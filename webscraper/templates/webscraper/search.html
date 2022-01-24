@@ -1,0 +1,20 @@
+{% extends 'webscraper/base.html' %}
+{% load static %}
+{% block head %}
+    
+{% endblock head %}
+
+{% block content %}
+    <h1>Hello search</h1>
+    <a href="{% url 'webscraper:index' %}"> index</a>
+    <form action="#" method="get">
+        
+        <fieldset>
+            <label for="search_bar">Search For Item Here:</label>
+            <input type="text" id="search_bar">
+            
+
+        </fieldset>
+        <input type="submit" value="Search">
+    </form>
+{% endblock content %}
