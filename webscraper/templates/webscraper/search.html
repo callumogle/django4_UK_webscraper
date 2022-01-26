@@ -1,13 +1,44 @@
 {% extends 'webscraper/base.html' %}
 {% load static %}
 {% block head %}
-    
+    <style>
+        .invisible{
+            visibility: hidden;
+        }
+        #spinner-loading{
+            display: flex;
+            justify-content: center;
+            
+        }
+        #spinner-loading::after{
+            content: "";
+            width:50px;
+            height:50px;
+            
+            border:10px solid #dddddd;
+            border-top-color:red;
+            border-radius:50%;
+            animation: loading 1.5s linear infinite;
+        }
+        @keyframes loading {
+            to {
+                transform:rotate(1turn);
+            }
+        }
+    </style>
+    <script>
+        function showspin(){
+            document.getElementById("spinner-loading").classList.toggle('invisible')
+            
+        }
+
+    </script>
 {% endblock head %}
 
 {% block content %}
     <h1>Hello search</h1>
-    <a href="{% url 'webscraper:index' %}"> index</a>
-    <form action="#" method="get">
+    <!-- <a href="{% url 'webscraper:index' %}"> index</a> -->
+    <form action="#" method="get" onsubmit="showspin()">
         
         <fieldset>
             <label for="search_bar">Search For Item Here:</label>
@@ -17,4 +48,5 @@
         </fieldset>
         <input type="submit" value="Search">
     </form>
+    <div id="spinner-loading" class="invisible"></div>
 {% endblock content %}
