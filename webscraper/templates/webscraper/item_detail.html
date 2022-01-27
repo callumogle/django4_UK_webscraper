@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>detail view</h1>
+    {% for i in item_history %}
+        <h1>{{i.item_price}}</h1>
+    {% endfor %}
+    
 </body>
 </html>

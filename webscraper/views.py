@@ -18,6 +18,12 @@ class IndexView(generic.ListView):
 class ItemDetailView(generic.DetailView):
     model = Webscraper
     template_name = 'webscraper/item_detail.html'
+    # thanks to Buhran khalid https://stackoverflow.com/questions/26570841/showing-a-list-of-objects-alongside-a-django-detailview
+    def get_context_data(self,*args,**kwargs):
+        context = super(ItemDetailView,self).get_context_data(*args,**kwargs)
+        precontext = Webscraper.objects.filter(pk=self.kwargs['pk'])[0]
+        context['item_history'] = Webscraper.objects.filter(item_name=precontext)
+        
 
 
 def search(request):
