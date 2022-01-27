@@ -1,13 +1,23 @@
 from datetime import date
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views import generic
 from .models import Webscraper
 from .scraper import scraper
 from time import strftime
 
-def index(request):
-    context = {"context" : Webscraper.objects.all()}
-    return render(request, 'webscraper/index.html', context)
+class IndexView(generic.ListView):
+    template_name = 'webscraper/index.html'
+    context_object_name = "latest_search_results"
+    
+    def get_queryset(self):
+
+        return Webscraper.objects.all()
+
+
+class ItemDetailView(generic.DetailView):
+    model = Webscraper
+    template_name = 'webscraper/item_detail.html'
 
 
 def search(request):

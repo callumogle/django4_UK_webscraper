@@ -5,11 +5,24 @@
 {% endblock head %}
 
 {% block content %}
-    <img src="{% static 'webscraper/asda/Aberlour-12-Year-Old-Single-Malt-Scotch-Whisky-70cl.jpg' %}" alt="Italian Trulli">
-    <h1>Hello World</h1>
-    {% if context.content == None %}
-        <h1>No results today</h1>
+    <br>
+    {% if latest_search_results  %}
+    <div id="results-container">
+        {% for result in latest_search_results %}
+            <div class="item-container">
+                <div class="image-container">
+                    <img src="{% static  result.item_image  %}.jpg" alt="{{result.item_name}}" height="100px" width="100px">
+                </div>
+                <div class="item-info">
+                    <a href="#">{{result.item_name}}</a>
+                    <div>£{{result.item_price}}</div>
+                    <div>{{result.unit_price}}</div>
+                </div>
+                
+            </div>
+        {% endfor %}
+    </div>
     {% else %}
-        {{context}}
+        <h1>No results today</h1>
     {% endif %}
 {% endblock content %}
