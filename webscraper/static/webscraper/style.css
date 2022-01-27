@@ -4,3 +4,25 @@
     box-sizing: border-box;
 }
 
+#results-container{
+    
+    display:grid;
+    /* gap puts padding around the children*/
+    gap: 1rem;
+    /* grid template columns how many boxes in a row, repeat(n,nfr) 
+    is how many columns and how big those columns should be,
+    1 fr being a fraction of avaialable space 
+    grid-template-columns: repeat(6,1fr);
+    
+    grid-template-rows:repeat(auto-fit,minmax(150px,1fr));
+    */
+    grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+    
+}
+
+.item-container{
+    border: solid 1px black;
+    display:grid;
+    justify-content: center;
+   
+}

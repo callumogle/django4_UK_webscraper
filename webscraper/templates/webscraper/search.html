@@ -38,11 +38,11 @@
 {% block content %}
     <h1>Hello search</h1>
     <!-- <a href="{% url 'webscraper:index' %}"> index</a> -->
-    <form action="#" method="get" onsubmit="showspin()">
+    <form action="/search-items" method="get" onsubmit="showspin()">
         
         <fieldset>
             <label for="search_bar">Search For Item Here:</label>
-            <input type="text" id="search_bar">
+            <input type="text" name="search_bar" id="search_bar">
             
 
         </fieldset>

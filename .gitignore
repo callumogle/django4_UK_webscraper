@@ -1,6 +1,2 @@
 .env
-static/asda/*
-static/sainsburys/*
-static/morrisons/*
-static/aldi/*
-static/tesco/*
+static/*
