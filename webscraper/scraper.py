@@ -59,7 +59,7 @@ def grab_image(store, element, image_css):
         print(e)
         img_name = "N/A"
 
-    file_path = f"{os.getcwd()}\webscraper\static\webscraper\{store}\{img_name}.jpg"
+    file_path = f"{os.getcwd()}\webscraper\static\{store}\{img_name}.jpg"
     if os.path.isfile(file_path):
         print(f"file: {img_name}.jpg already exists")
     else:

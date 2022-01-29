@@ -1,27 +1,53 @@
 {% extends 'webscraper/base.html' %}
 {% load static %}
 {% block head %}
-    
+    <script>
+        function filterStore(){
+            // if this no longer works check the html structure
+            let grabStores = document.getElementsByClassName("store");
+            for (let i of grabStores){
+                if (i.innerHTML !== document.getElementById("store_select").value){
+                    i.parentElement.parentElement.style.display = "none";
+                }
+                else{
+                    i.parentElement.parentElement.style.display = "grid";
+                }
+            }
+        }
+    </script>
 {% endblock head %}
 
 {% block content %}
+    <label for="store_select">filter by store</label>
+    <select id="store_select" onchange="filterStore();">
+        <option value="">Select store</option>
+        <option value="Asda">Asda</option>
+        <option value="Aldi">Aldi</option>
+        <option value="Morrisons">Morrisons</option>
+        <option value="Sainsburys">Sainsburys</option>
+        <option value="Tesco">Tesco</option>
+        
+    </select>
     <br>
     {% if items %}
         <div id="results-container">
             {% for item in items %}
+                {% if item.item_name == "N/A" %}
+                    <!--dont do anyting if the item does not have a name-->
+                {% else %}
                 <div class="item-container">
                     <div class="image-container">
                         <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="100px" width="100px">
                     </div>
                     <div class="item-info">
-                        <div><a href="{% url 'webscraper:item_detail' item.id %}">{{item.item_name}}</a></div>
-                        
-                        <div>£{{item.item_price}}</div>
-                        <div>{{item.unit_price}}</div>
+                        <div class="name"><a href="{% url 'webscraper:item_detail' item.id %}">{{item.item_name}}</a></div>
+                        <div class="store">{{item.store|capfirst}}</div>
+                        <div class="price">£{{item.item_price}}</div>
+                        <div class="unitprice">{{item.unit_price}}</div>
                     </div>
                     
                 </div>
-
+                {% endif  %}
             {% endfor %}
         </div>
     {% else %}

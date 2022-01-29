@@ -7,22 +7,25 @@ from .scraper import scraper
 from time import strftime
 
 class IndexView(generic.ListView):
-    template_name = 'webscraper/index.html'
-    context_object_name = "latest_search_results"
+    template_name = 'webscraper/results.html'
+    context_object_name = "items"
     
     def get_queryset(self):
 
-        return Webscraper.objects.all()
+        return Webscraper.objects.all()[:50:-1]
 
 
 class ItemDetailView(generic.DetailView):
     model = Webscraper
     template_name = 'webscraper/item_detail.html'
+    context_object_name = 'item'
     # thanks to Buhran khalid https://stackoverflow.com/questions/26570841/showing-a-list-of-objects-alongside-a-django-detailview
     def get_context_data(self,*args,**kwargs):
         context = super(ItemDetailView,self).get_context_data(*args,**kwargs)
+        # the kwarg is the slug passed into the url in this case pk, filter returns a queryset hence [0]
         precontext = Webscraper.objects.filter(pk=self.kwargs['pk'])[0]
         context['item_history'] = Webscraper.objects.filter(item_name=precontext)
+        return context
         
 
 
@@ -43,5 +46,5 @@ def webscraper(request):
         else:
             scraper(search_term)
             search_results = Webscraper.objects.filter(item_searched=search_term, date_searched=todays_date)
-            context = {{"items" : search_results}}
+            context = {"items" : search_results}
             return render(request,"webscraper/results.html", context)

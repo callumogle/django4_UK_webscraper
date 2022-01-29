@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% for i in item_history %}
-        <h1>{{i.item_price}}</h1>
-    {% endfor %}
+{% extends 'webscraper/base.html' %}
+{% load static %}
+{% block content%}
+<h1>{{item.item_name}}</h1>
+<div class="image-container">
+    <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="100px" width="100px">
+</div>
+    {% if item_history %}
     
-</body>
-</html>
+        {% for i in item_history %}
+            
+            <div>{{i.date_searched}}: £{{i.item_price}} {{i.unit_price}}</div>
+        {% endfor %}
+    {% else %}
+        <h1>no price history</h1>
+    {% endif %}
+{% endblock content%}
