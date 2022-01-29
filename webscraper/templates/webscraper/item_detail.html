@@ -6,7 +6,7 @@
     <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="100px" width="100px">
 </div>
     {% if item_history %}
-    
+        <h2>item history</h2>
         {% for i in item_history %}
             
             <div>{{i.date_searched}}: £{{i.item_price}} {{i.unit_price}}</div>
@@ -14,4 +14,5 @@
     {% else %}
         <h1>no price history</h1>
     {% endif %}
+    <div><a href="{{item.item_url}}">visit the page on the stores website?</a></div>
 {% endblock content%}

@@ -58,7 +58,9 @@ def grab_image(store, element, image_css):
     except KeyError as e:
         print(e)
         img_name = "N/A"
-
+    
+    # one milk item from tesco has a *, i want to escape all special characters but it messes up the file search
+    img_name = img_name.replace("*","")
     file_path = f"{os.getcwd()}\webscraper\static\{store}\{img_name}.jpg"
     if os.path.isfile(file_path):
         print(f"file: {img_name}.jpg already exists")
