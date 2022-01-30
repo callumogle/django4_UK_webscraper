@@ -9,6 +9,7 @@ from random import randint
 
 
 import requests
+from requests.exceptions import InvalidSchema
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup as bs
@@ -60,15 +61,20 @@ def grab_image(store, element, image_css):
         img_name = "N/A"
     
     # one milk item from tesco has a *, i want to escape all special characters but it messes up the file search
-    img_name = img_name.replace("*","")
+    # pizza sizes can be written in inches as ", replace that too
+    img_name = img_name.replace("*","").replace('"','')
     file_path = f"{os.getcwd()}\webscraper\static\{store}\{img_name}.jpg"
     if os.path.isfile(file_path):
         print(f"file: {img_name}.jpg already exists")
     else:
         with open(file_path, "wb") as f:
-            im = requests.get(link)
-            f.write(im.content)
-            print("Writing: ", img_name)
+            try:
+                im = requests.get(link)
+                f.write(im.content)
+                print("Writing: ", img_name)
+            except InvalidSchema as ISE:
+                print(f"trying to request image from {store} has resulted in: {ISE}")
+                
     return img_name
 
 
@@ -99,7 +105,7 @@ def asda_scrape(search_term):
             rand_y = randint(750, 1000)
             driver.execute_script(f"window.scrollBy(0, {rand_y});")
             new_height = driver.execute_script("return window.pageYOffset")
-            print(f"asda {new_height}")
+            #print(f"asda {new_height}")
             if new_height == last_height:
                 break
             else:
@@ -388,7 +394,7 @@ def sainsbury_scrape(search_term):
             try:
                 # lower timeout needed as the time taken for above wait
                 # would also allow time load this element
-                WebDriverWait(driver, timeout=2).until(
+                WebDriverWait(driver, timeout=10).until(
                     lambda d: d.find_element(By.CLASS_NAME, "gridView")
                 )
             except TimeoutException:
@@ -397,9 +403,7 @@ def sainsbury_scrape(search_term):
             else:
                 print("found branded page")
 
-                WebDriverWait(driver, timeout=10).until(
-                    lambda d: d.find_element(By.CLASS_NAME, "gridView")
-                )
+                
                 try:
                     driver.find_element_by_id("onetrust-accept-btn-handler").click()
                 except ElementNotInteractableException as e:
@@ -678,7 +682,7 @@ def scraper(search_term):
             try:
 
                 for count, value in enumerate(running_task.result()):
-                    print(count, value["store"], value["name"])
+                    #print(count, value["store"], value["name"])
                     Webscraper.objects.create(
                         store=value["store"],
                         item_name=value["name"],

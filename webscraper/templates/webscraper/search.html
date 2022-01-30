@@ -1,39 +1,39 @@
 {% extends 'webscraper/base.html' %}
 {% load static %}
 {% block head %}
-    <title>Search</title>
-    <style>
-        .invisible{
-            visibility: hidden;
+<title>Search</title>
+<style>
+    .invisible{
+        visibility: hidden;
+    }
+    #spinner-loading{
+        display: flex;
+        justify-content: center;
+        
+    }
+    #spinner-loading::after{
+        content: "";
+        width:50px;
+        height:50px;
+        
+        border:10px solid #dddddd;
+        border-top-color:red;
+        border-radius:50%;
+        animation: loading 1.5s linear infinite;
+    }
+    @keyframes loading {
+        to {
+            transform:rotate(1turn);
         }
-        #spinner-loading{
-            display: flex;
-            justify-content: center;
-            
-        }
-        #spinner-loading::after{
-            content: "";
-            width:50px;
-            height:50px;
-            
-            border:10px solid #dddddd;
-            border-top-color:red;
-            border-radius:50%;
-            animation: loading 1.5s linear infinite;
-        }
-        @keyframes loading {
-            to {
-                transform:rotate(1turn);
-            }
-        }
-    </style>
-    <script>
-        function showspin(){
-            document.getElementById("spinner-loading").classList.toggle('invisible')
-            
-        }
+    }
+</style>
+<script>
+    function showspin(){
+        document.getElementById("spinner-loading").classList.toggle('invisible')
+        
+    }
 
-    </script>
+</script>
 {% endblock head %}
 
 {% block content %}

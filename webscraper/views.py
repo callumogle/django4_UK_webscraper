@@ -34,6 +34,10 @@ def search(request):
 
 
 def webscraper(request):
+    ### TO DO
+        # Webscraper.objects.filter(item_name__icontains="braeburn")
+        # use above query as a basis to group stuff together with similar name
+    ###
     # can definetly do this better
     if request.method == 'GET':
         todays_date = strftime("%Y-%m-%d")

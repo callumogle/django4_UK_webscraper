@@ -6,7 +6,36 @@
     {% else %}
         <title>{{request.resolver_match.url_name}}</title>
     {% endif %}
+    <style>
+        .invisible{
+            visibility: hidden;
+        }
+        #spinner-loading{
+            display: flex;
+            justify-content: center;
+            
+        }
+        #spinner-loading::after{
+            content: "";
+            width:50px;
+            height:50px;
+            
+            border:10px solid #dddddd;
+            border-top-color:red;
+            border-radius:50%;
+            animation: loading 1.5s linear infinite;
+        }
+        @keyframes loading {
+            to {
+                transform:rotate(1turn);
+            }
+        }
+    </style>
     <script>
+        function showspin(){
+            document.getElementById("spinner-loading").classList.toggle('invisible')
+        
+        }
         function filterStore(){
             // if this no longer works check the html structure
             let grabStores = document.getElementsByClassName("store");
@@ -65,6 +94,18 @@
 {% endblock head %}
 
 {% block content %}
+<!-- <a href="{% url 'webscraper:index' %}"> index</a> -->
+    <form action="/search-items" method="get" onsubmit="showspin()">
+            
+        <fieldset>
+            <label for="search_bar">Search For Item Here:</label>
+            <input type="text" name="search_bar" id="search_bar">
+            
+
+        </fieldset>
+        <input type="submit" value="Search">
+    </form>
+    <div id="spinner-loading" class="invisible"></div>
     <div id="filters">
         <div id="storeFilter">
             <label for="store_select">filter by store</label>
