@@ -23,20 +23,71 @@
                 }
             }
         }
+        function sortByPrice(){
+            // taken and modified from https://www.w3schools.com/howto/howto_js_sort_list.asp
+            var list, i, switching, b, shouldSwitch;
+            list = document.getElementById("results-container");
+            switching = true;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                b = list.getElementsByClassName("price");
+                // Loop through all list items:
+                for (i = 0; i < (b.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Check if the next item should
+                    switch place with the current item: */
+                    if (document.getElementById("price_sort").value === "lowHigh"){
+                        testcase = b[i].innerHTML > b[i + 1].innerHTML
+                    }
+                    else if(document.getElementById("price_sort").value === "highLow"){
+                        testcase = b[i].innerHTML < b[i + 1].innerHTML
+                    }
+                    if (testcase) {
+                        /* If next item is alphabetically lower than current item,
+                        mark as a switch and break the loop: */
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark the switch as done: */
+                    b[i].parentNode.parentNode.parentNode.insertBefore(b[i + 1].parentNode.parentNode, b[i].parentNode.parentNode);
+                    switching = true;
+                }
+            }
+        }
     </script>
 {% endblock head %}
 
 {% block content %}
-    <label for="store_select">filter by store</label>
-    <select id="store_select" onchange="filterStore();">
-        <option value="all">Select store</option>
-        <option value="Asda">Asda</option>
-        <option value="Aldi">Aldi</option>
-        <option value="Morrisons">Morrisons</option>
-        <option value="Sainsbury's">Sainsburys</option>
-        <option value="Tesco">Tesco</option>
-    </select>
-    <br>
+    <div id="filters">
+        <div id="storeFilter">
+            <label for="store_select">filter by store</label>
+            <select id="store_select" onchange="filterStore();">
+                <option value="all">Select store</option>
+                <option value="Asda">Asda</option>
+                <option value="Aldi">Aldi</option>
+                <option value="Morrisons">Morrisons</option>
+                <option value="Sainsbury's">Sainsburys</option>
+                <option value="Tesco">Tesco</option>
+            </select>
+        </div>
+        <div id="priceSort">
+            <label for="price_sort">Sort by price</label>
+            <select id="price_sort" onchange="sortByPrice();">
+                <option value="all">Select Option</option>
+                <option value="lowHigh">Low->High</option>
+                <option value="highLow">High->Low</option>
+                
+            </select>
+        </div>
+    </div>
+        <br>
     {% if items %}
         <div id="results-container">
             {% for item in items %}
