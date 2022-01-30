@@ -561,17 +561,28 @@ def tesco_scrape(search_term):
                 # is_the_image_loaded_yet = driver.execute_script("return document.images[49].srcset;")
                 # WebDriverWait(driver,timeout=2).until(lambda d: d.execute_script("return document.images[49].srcset;") != "")
                 # this is the recommended tile that loads at the bottom of tesco's page and only loads when you scroll down there
-                WebDriverWait(driver, timeout=2).until(
-                    lambda d: d.execute_script(
-                        "return document.getElementsByClassName('carousel__list').length;"
-                    )
-                    > 0
-                )
+                # make sure the last image is loaded
+                try:
+                    WebDriverWait(driver, timeout=2).until(
+                        lambda d: d.execute_script('''
+                            let page_body = document.getElementsByClassName('product-list grid')[0];
+                            img_arr = page_body.getElementsByTagName('img');
+                            last_img = img_arr[img_arr.length-1].src;
+                            
+                            return last_img;
+                        '''
+                        ).find(".com") != -1
+                                                        )
+                    break
+                except Exception as e:
+                    print(f"lets see what error waiting for last image to load caused: {e}")
+
                 # print(is_the_image_loaded_yet)
-                break
+                
             else:
                 last_height = new_height
-
+                
+        
         html = driver.page_source
         soup = bs(html, "html.parser")
         # since i could not find a valid element for tesco webdriverwait, this is how i will handle empty results
