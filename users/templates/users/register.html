@@ -1,0 +1,18 @@
+{% extends 'webscraper/base.html' %}
+{% block content%}
+    <div class="content-section">
+        <form method="POST" id="register-form">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Join Today</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div>
+                <button type="submit">Sign Up</button>
+            </div>
+        </form>
+        <div>
+            <small>already have an account?      <a href="{% url 'login' %}">log in</a></small>
+        </div>
+    </div>
+{% endblock content%}

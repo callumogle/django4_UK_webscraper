@@ -20,8 +20,15 @@
         <ul class="nav-links">
             <li><a href="{% url 'webscraper:index' %}">Index</a></li>
             <li><a href="{% url 'webscraper:search' %}">Search</a></li>
-            <li><a href="#">work</a></li>
-            <li><a href="#">projects</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">logout</a></li>
+                
+            {% else %}
+                <li><a href="{% url 'login' %}">login</a></li>
+                <li><a href="{% url 'register' %}">register</a></li>
+            {% endif %}
+            
+            
         </ul>
         <div class="burger">
             <div class="line1"></div>
@@ -32,6 +39,11 @@
     <script src="{% static 'webscraper/nav.js' %}">
 
     </script>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-{{ message.tags }}"> {{ message }}  </div>
+        {% endfor %}
+    {% endif %}
     {% block content %}
     {% endblock content %}
 </body>

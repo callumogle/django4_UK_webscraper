@@ -43,12 +43,17 @@ def webscraper(request):
         todays_date = strftime("%Y-%m-%d")
         search_term = request.GET.get('search_bar')
         search_results = Webscraper.objects.filter(item_searched=search_term, date_searched=todays_date)
-        if search_results.count() > 0:
-            context = {"items" : search_results.order_by('item_name')}
+        # prevents non admin from causing a selenium search and reduce odds of detection
+        # and ip ban. need to set up admin page
+        if not request.user.is_superuser:
+            context = {"items" : Webscraper.objects.filter(item_name__icontains=search_term, date_searched=todays_date)}
             return render(request,"webscraper/results.html", context)
-            #return render(request,"webscraper/results.html",{"items" : search_results})
-        else:
+           
+        elif search_results.count() == 0:
             scraper(search_term)
             search_results = Webscraper.objects.filter(item_searched=search_term, date_searched=todays_date)
             context = {"items" : search_results.order_by('item_name')}
             return render(request,"webscraper/results.html", context)
+        
+        else:
+            return render(request,"webscraper/results.html", {"items":search_results})

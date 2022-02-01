@@ -12,7 +12,8 @@ to run use: python manage.py runserver
 on a browser visit localhost:8000
 enter what you want to look for
 ## To do
-
+- make it so only admin user can make searches that will change database
+and non admins will only search in current state database
 - improve the display template and just the whole look of the website entirely 
 - add filters to display results to sort by store, by price etc
 - handle cases where no items are found
