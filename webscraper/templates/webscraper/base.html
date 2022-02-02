@@ -21,11 +21,11 @@
             <li><a href="{% url 'webscraper:index' %}">Index</a></li>
             <li><a href="{% url 'webscraper:search' %}">Search</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}">logout</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
                 
             {% else %}
-                <li><a href="{% url 'login' %}">login</a></li>
-                <li><a href="{% url 'register' %}">register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
             
             
