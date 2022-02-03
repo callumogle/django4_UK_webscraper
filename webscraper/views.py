@@ -1,4 +1,6 @@
 from datetime import date
+from plotly.offline import plot
+import plotly.graph_objects as go
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import generic
@@ -26,6 +28,33 @@ class ItemDetailView(generic.DetailView):
         # the kwarg is the slug passed into the url in this case pk, filter returns a queryset hence [0]
         precontext = Webscraper.objects.filter(pk=self.kwargs["pk"])[0]
         context["item_history"] = Webscraper.objects.filter(item_name=precontext)
+
+        # thanks to https://albertrtk.github.io/2021/01/24/Graph-on-a-web-page-with-Plotly-and-Django.html
+        # for helping me make these graphs
+
+        # not sure how to do this in list comprehension
+        # x = [i for i.date_searched ]
+
+        x = []
+        
+        if len(context["item_history"]) > 1:
+            for i in context['item_history']:
+                x.append(i.date_searched)
+            y1 = []
+            for i in context['item_history']:
+                y1.append(i.item_price)
+            graph = go.Scatter(x=x, y=y1, mode='lines+markers', name='Line y1')
+            
+            layout = {
+            'title': 'Item Price History',
+            'xaxis_title': 'Date',
+            'yaxis_title': 'Item price (£)',
+            'height': 420,
+            'width': 560,
+            }
+            
+            context['graph'] = plot({'data': graph, 'layout': layout}, 
+                        output_type='div')
         return context
 
 

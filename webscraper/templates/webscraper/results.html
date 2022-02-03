@@ -6,31 +6,7 @@
     {% else %}
         <title>{{request.resolver_match.url_name}}</title>
     {% endif %}
-    <style>
-        .invisible{
-            visibility: hidden;
-        }
-        #spinner-loading{
-            display: flex;
-            justify-content: center;
-            
-        }
-        #spinner-loading::after{
-            content: "";
-            width:50px;
-            height:50px;
-            
-            border:10px solid #dddddd;
-            border-top-color:red;
-            border-radius:50%;
-            animation: loading 1.5s linear infinite;
-        }
-        @keyframes loading {
-            to {
-                transform:rotate(1turn);
-            }
-        }
-    </style>
+    
     <script>
         function showspin(){
             document.getElementById("spinner-loading").classList.toggle('invisible')
@@ -41,10 +17,10 @@
             let grabStores = document.getElementsByClassName("store");
             for (let i of grabStores){
                 // if i do not do this when you go back to "select store" no results are displayed
-                if (document.getElementById("store_select").value === "all"){
+                if (document.getElementById("store-select").value === "all"){
                     i.parentElement.parentElement.style.display = "grid";
                 }
-                else if (i.innerHTML !== document.getElementById("store_select").value){
+                else if (i.innerHTML !== document.getElementById("store-select").value){
                     i.parentElement.parentElement.style.display = "none";
                 }
                 else{
@@ -69,10 +45,10 @@
                     shouldSwitch = false;
                     /* Check if the next item should
                     switch place with the current item: */
-                    if (document.getElementById("price_sort").value === "lowHigh"){
+                    if (document.getElementById("price-sort").value === "lowHigh"){
                         testcase = b[i].innerHTML > b[i + 1].innerHTML
                     }
-                    else if(document.getElementById("price_sort").value === "highLow"){
+                    else if(document.getElementById("price-sort").value === "highLow"){
                         testcase = b[i].innerHTML < b[i + 1].innerHTML
                     }
                     if (testcase) {
@@ -95,21 +71,19 @@
 
 {% block content %}
 <!-- <a href="{% url 'webscraper:index' %}"> index</a> -->
-    <form action="/search-items" method="get" onsubmit="showspin()">
+    <form action="/search-items" method="get" onsubmit="showspin()" id="search-form">
             
-        <fieldset>
-            <label for="search_bar">Search For Item Here:</label>
-            <input type="text" name="search_bar" id="search_bar">
-            
+    
+        <label for="search_bar">Search For Item Here:</label>
+        <input type="text" name="search_bar" id="search-bar">
 
-        </fieldset>
         <input type="submit" value="Search">
     </form>
     <div id="spinner-loading" class="invisible"></div>
     <div id="filters">
-        <div id="storeFilter">
-            <label for="store_select">filter by store</label>
-            <select id="store_select" onchange="filterStore();">
+        <div id="store-filter-cont">
+            <label for="store-select">Filter By Store</label>
+            <select id="store-select" onchange="filterStore();">
                 <option value="all">Select store</option>
                 <option value="Asda">Asda</option>
                 <option value="Aldi">Aldi</option>
@@ -118,9 +92,9 @@
                 <option value="Tesco">Tesco</option>
             </select>
         </div>
-        <div id="priceSort">
-            <label for="price_sort">Sort by price</label>
-            <select id="price_sort" onchange="sortByPrice();">
+        <div id="price-sort-cont">
+            <label for="price-sort">Sort By Price</label>
+            <select id="price-sort" onchange="sortByPrice();">
                 <option value="all">Select Option</option>
                 <option value="lowHigh">Low->High</option>
                 <option value="highLow">High->Low</option>

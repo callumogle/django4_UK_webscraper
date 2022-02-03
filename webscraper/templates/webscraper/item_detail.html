@@ -5,6 +5,12 @@
 <div class="image-container">
     <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="100px" width="100px">
 </div>
+
+    {% if graph %}
+        {% autoescape off %}
+            {{graph}}
+        {% endautoescape %}
+    {% endif %}
     {% if item_history %}
         <h2>item history</h2>
         {% for i in item_history %}
