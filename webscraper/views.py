@@ -15,7 +15,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
 
-        return Webscraper.objects.all()[::50]
+        return Webscraper.objects.all().order_by('-id')[:50][::-1]
 
 
 class ItemDetailView(generic.DetailView):

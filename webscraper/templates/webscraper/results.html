@@ -71,15 +71,6 @@
 
 {% block content %}
 <!-- <a href="{% url 'webscraper:index' %}"> index</a> -->
-    <form action="/search-items" method="get" onsubmit="showspin()" id="search-form">
-            
-    
-        <label for="search_bar">Search For Item Here:</label>
-        <input type="text" name="search_bar" id="search-bar">
-
-        <input type="submit" value="Search">
-    </form>
-    <div id="spinner-loading" class="invisible"></div>
     <div id="filters">
         <div id="store-filter-cont">
             <label for="store-select">Filter By Store</label>

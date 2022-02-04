@@ -18,8 +18,15 @@
             <h4>Webscraper</h4>
         </div>
         <ul class="nav-links">
+            <li>
+                <form action="/search-items" method="get" onsubmit="showspin()" id="search-form">
+                    <label for="search_bar"></label>
+                    <input type="text" name="search_bar" id="search-bar">
+                    <input type="image" id="mag-glass" src="{% static 'webscraper/mag_glass_search.jpg' %}">
+                </form>
+            </li>
             <li><a href="{% url 'webscraper:index' %}">Index</a></li>
-            <li><a href="{% url 'webscraper:search' %}">Search</a></li>
+            
             {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}">Logout</a></li>
                 
@@ -47,6 +54,7 @@
     </nav>
     <main>
         <section>
+            <div id="spinner-loading" class="invisible"></div>
             {% block content %}
             {% endblock content %}
         </section>

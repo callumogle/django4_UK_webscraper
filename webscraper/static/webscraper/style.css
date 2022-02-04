@@ -45,11 +45,14 @@ header,footer{
 }
 
 
-#search-form {
-    margin-bottom:20px;
-    margin-top: 10px;
+#search-form{
+    display: flex;
+    justify-content: center;
 }
 
+#mag-glass{
+    margin-left:2px;    
+}
 
 #filters > #store-filter-cont {
     float:left;
