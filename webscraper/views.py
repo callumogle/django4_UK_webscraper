@@ -31,13 +31,12 @@ class ItemDetailView(generic.DetailView):
 
         # thanks to https://albertrtk.github.io/2021/01/24/Graph-on-a-web-page-with-Plotly-and-Django.html
         # for helping me make these graphs
-
-        # not sure how to do this in list comprehension
-        # x = [i for i.date_searched ]
-
-        x = []
         
         if len(context["item_history"]) > 1:
+            # not sure how to do this in list comprehension
+            # x = [i for i.date_searched ]
+            x = []
+
             for i in context['item_history']:
                 x.append(i.date_searched)
             y1 = []

@@ -10,7 +10,10 @@
     <script>
         function showspin(){
             document.getElementById("spinner-loading").classList.toggle('invisible')
-        
+            
+            document.querySelector('section > div#filters').classList.toggle('invisible')
+            document.querySelector('section > div#results-container').classList.toggle('invisible')
+            
         }
         function filterStore(){
             // if this no longer works check the html structure
