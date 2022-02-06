@@ -1,4 +1,5 @@
 # need to do this so i can use concurrent futures
+from statistics import quantiles
 import django
 
 django.setup()
@@ -6,7 +7,7 @@ from concurrent.futures import ProcessPoolExecutor
 import os
 from time import sleep
 from random import randint
-
+import re
 
 import requests
 from requests.exceptions import InvalidSchema
@@ -24,6 +25,32 @@ from selenium.common.exceptions import (
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .models import Webscraper
+#https://stackoverflow.com/questions/4664850/how-to-find-all-occurrences-of-a-substring
+#answer by Pratik Deoghare
+def get_quantity(string):
+
+    string = string.lower()
+    regex0 = "([0-9]{1,4} ?[gmlc]?[lgm] x[0-9])|(x[0-9] .* [0-9]{1,4}[gmlc]? ?[lgm])"
+    # looks something like McVitie's Jaffa Cakes x10 122g
+    # or Pepsi Max Cherry Cans 8 x 330ml
+    # or Sainsbury's Royal Gala Apples, SO Organic x6
+    regex1 = '([0-9]{1,2} ?x ?[0-9]{1,4}(\.[0-9])? ?[mkc]?[mlg])|x[0-9]{1,2} ?[0-9]{1,3} ?[kmc]?[gml]|(x[0-9]{1,4})'
+    #'(\d*\W{1}x[0-9]*\ *[0-9]*\ *[kgml]{0,2})'
+    # looks for something like 100 ml or 100g or 1l
+    # gets 9 pack before 207g in: Twix Biscuit 9 Pack 207g
+    regex2 = '([0-9]{1,3})(\.[0-9]{1,3})? *[mclgk]{1,3}'
+    # pretty straight forward other than the last which is looking for 'x pack'
+    regex3 = '(single|loose|each|[0-9]{1,3} ?(pack))'   
+    # thanks to Karl Knechtel for this method of joining regex expressions
+    # https://stackoverflow.com/questions/8888567/match-a-line-with-multiple-regex-using-python
+    quantity = re.search('|'.join('(?:{0})'.format(x) for x in (regex0,regex1,regex2,regex3)),string).group(0)
+    # really annoying, for one product the name is McVitie's Digestives Milk Chocolate x2 Biscuits 316g
+    quantity = quantity.replace('biscuits ','').strip()
+    single_items = ['single','loose','each']
+    print("genrgfbweopjwnp")
+    if quantity in single_items:
+        quantity = 1
+    return quantity
 
 
 def grab_image(store, element, image_css):
@@ -144,6 +171,12 @@ def asda_scrape(search_term):
                     price = price.strip()
                 except (NoSuchElementException, AttributeError) as e:
                     price = None
+
+                try:
+                    quantity = elem.select_one('span.co-item__volume').text
+                except (NoSuchElementException, AttributeError) as e:
+                    quantity = None
+    
                 try:
                     unit_price = elem.select_one("span.co-product__price-per-uom").text
                 except (NoSuchElementException, AttributeError) as e:
@@ -153,6 +186,7 @@ def asda_scrape(search_term):
                     "name": name,
                     "image_name": img_name,
                     "price": price,
+                    "quantity": quantity,
                     "unit_price": unit_price,
                     "url": url,
                     "store": "asda",
@@ -192,6 +226,7 @@ def aldi_scrape(search_term):
                 "name": "N/A",
                 "image_name": "N/A",
                 "price": 0.00,
+                "quantity": None,
                 "unit_price": None,
                 "url": url,
                 "store": "aldi",
@@ -227,6 +262,10 @@ def aldi_scrape(search_term):
             except (NoSuchElementException, AttributeError):
                 price = None
             try:
+                quantity = elem.select_one('div.text-gray-small').text
+            except (NoSuchElementException, AttributeError) as e:
+                quantity = None
+            try:
                 unit_price = elem.select_one("p.m-0").text
             except (NoSuchElementException, AttributeError):
                 unit_price = "n/a"
@@ -237,6 +276,7 @@ def aldi_scrape(search_term):
                 "name": name,
                 "image_name": img_name,
                 "price": price,
+                "quantity":quantity,
                 "unit_price": unit_price,
                 "url": url,
                 "store": "aldi",
@@ -277,6 +317,7 @@ def morrisons_scrape(search_term):
                 "name": "N/A",
                 "image_name": "N/A",
                 "price": 0.00,
+                "quantity": None,
                 "unit_price": None,
                 "url": url,
                 "store": "morrisons",
@@ -342,6 +383,11 @@ def morrisons_scrape(search_term):
                     price = price.strip()
             except (NoSuchElementException, AttributeError) as e:
                 price = None
+            
+            try:
+                quantity = elem.select_one('span.fop-catch-weight').text
+            except (NoSuchElementException, AttributeError) as e:
+                quantity = None
             try:
                 unit_price = elem.select_one("span.fop-unit-price").text
             except (NoSuchElementException, AttributeError) as e:
@@ -351,6 +397,7 @@ def morrisons_scrape(search_term):
                 "name": name,
                 "image_name": img_name,
                 "price": price,
+                "quantity":quantity,
                 "unit_price": unit_price,
                 "url": url,
                 "store": "morrisons",
@@ -437,6 +484,12 @@ def sainsbury_scrape(search_term):
 
                     except (NoSuchElementException, AttributeError):
                         price = None
+                    
+                    try:
+                        quantity = get_quantity(name)
+
+                    except Exception as e:
+                        quantity = None
                     try:
                         unit_price = elem.select_one("p.pricePerMeasure").text
                     except (NoSuchElementException, AttributeError) as e:
@@ -447,6 +500,7 @@ def sainsbury_scrape(search_term):
                         "name": name.strip(),
                         "image_name": img_name,
                         "price": price,
+                        "quantity":quantity,
                         "unit_price": unit_price,
                         "url": url,
                         "store": "sainsbury's",
@@ -505,6 +559,11 @@ def sainsbury_scrape(search_term):
                     except (NoSuchElementException, AttributeError):
                         price = None
                     try:
+                        quantity = get_quantity(name)
+
+                    except Exception as e:
+                        quantity = None
+                    try:
                         unit_price = elem.select_one("span.pt__cost__per-unit").text
                     except (NoSuchElementException, AttributeError) as e:
                         print(e)
@@ -514,6 +573,7 @@ def sainsbury_scrape(search_term):
                         "name": name.strip(),
                         "image_name": img_name,
                         "price": price,
+                        "quantity":quantity,
                         "unit_price": unit_price,
                         "url": url,
                         "store": "sainsbury's",
@@ -596,6 +656,7 @@ def tesco_scrape(search_term):
                 "name": "N/A",
                 "image_name": "N/A",
                 "price": 0.00,
+                "quantity": None,
                 "unit_price": None,
                 "url": url,
                 "store": "tesco",
@@ -625,6 +686,11 @@ def tesco_scrape(search_term):
             except (NoSuchElementException, AttributeError):
                 price = None
             try:
+                quantity = get_quantity(name)
+
+            except Exception as e:
+                quantity = None
+            try:
                 unit_price = elem.select_one("div.price-per-quantity-weight").text
             except (NoSuchElementException, AttributeError):
                 unit_price = "n/a"
@@ -635,6 +701,7 @@ def tesco_scrape(search_term):
                 "name": name,
                 "image_name": img_name,
                 "price": price,
+                "quantity":quantity,
                 "unit_price": unit_price,
                 "url": url,
                 "store": "tesco",
@@ -681,13 +748,14 @@ def scraper(search_term):
         for running_task in running_tasks:
             try:
 
-                for count, value in enumerate(running_task.result()):
-                    #print(count, value["store"], value["name"])
+                for value in running_task.result():
+                    
                     Webscraper.objects.create(
                         store=value["store"],
                         item_name=value["name"],
                         item_image=f'{value["store"]}/{value["image_name"]}',
                         item_price=value["price"],
+                        item_quantity = value["quantity"],
                         unit_price=value["unit_price"],
                         item_searched=search_term.replace("%20", " "),
                         item_url=value["url"],

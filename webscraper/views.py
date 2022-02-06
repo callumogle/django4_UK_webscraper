@@ -62,10 +62,7 @@ def search(request):
 
 
 def webscraper(request):
-    ### TO DO
-    # Webscraper.objects.filter(item_name__icontains="braeburn")
-    # use above query as a basis to group stuff together with similar name
-    ###
+   
     # can definetly do this better
     if request.method == "GET":
         todays_date = strftime("%Y-%m-%d")
@@ -74,7 +71,7 @@ def webscraper(request):
             item_searched=search_term, date_searched=todays_date
         )
         # prevents non admin from causing a selenium search and reduce odds of detection
-        # and ip ban. need to set up admin page
+        # and ip ban.
         if not request.user.is_superuser:
             results = Webscraper.objects.filter(
                 item_name__icontains=search_term, date_searched=todays_date
@@ -84,7 +81,7 @@ def webscraper(request):
             context = {"items": results}
             return render(request, "webscraper/results.html", context)
 
-        elif search_results.count() == 0:
+        elif not search_results.exists():
             scraper(search_term)
             search_results = Webscraper.objects.filter(
                 item_searched=search_term, date_searched=todays_date
