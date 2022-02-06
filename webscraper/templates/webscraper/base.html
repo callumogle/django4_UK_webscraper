@@ -8,6 +8,14 @@
     
     <link rel="stylesheet" type="text/css" href="{% static 'webscraper/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'webscraper/navbar.css' %}">
+    <script>
+    function showspin(){
+        document.getElementById("spinner-loading").classList.toggle('invisible')
+        
+        document.querySelector('section > div:not(#spinner-loading)').classList.toggle('invisible')
+        document.querySelector('section > div#results-container').classList.toggle('invisible')
+        
+    }</script>
     {% block head %}
     {% endblock head %}
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
@@ -29,13 +37,10 @@
             
             {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}">Logout</a></li>
-                
             {% else %}
                 <li><a href="{% url 'login' %}">Login</a></li>
                 <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
-            
-            
         </ul>
         <div class="burger">
             <div class="line1"></div>

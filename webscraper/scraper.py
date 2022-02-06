@@ -579,8 +579,8 @@ def tesco_scrape(search_term):
                                                         )
                     break
                 except Exception as e:
-                    print(f"lets see what error waiting for last image to load caused: {e}")
-
+                    print(f"lets see what error waiting for last image to load caused: {e.args}")
+                    break
                 # print(is_the_image_loaded_yet)
                 
             else:
