@@ -144,3 +144,6 @@ p label{
     width: 50%;
     margin-left: 25%;
 }
+.content-section button[type="submit"]:hover{
+    cursor:pointer;
+}
