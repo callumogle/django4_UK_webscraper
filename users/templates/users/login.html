@@ -5,8 +5,8 @@
     <div class="content-section">
         <form method="POST" id="register-form">
             {% csrf_token %}
-            <fieldset>
-                <legend>Log In</legend>
+            <fieldset class="login-form">
+                
                 {{ form.as_p }}
             </fieldset>
             <div>

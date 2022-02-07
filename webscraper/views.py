@@ -45,11 +45,11 @@ class ItemDetailView(generic.DetailView):
             graph = go.Scatter(x=x, y=y1, mode='lines+markers', name='Line y1')
             
             layout = {
-            'title': 'Item Price History',
-            'xaxis_title': 'Date',
-            'yaxis_title': 'Item price (£)',
-            'height': 420,
-            'width': 560,
+                'title': 'Item Price History',
+                'xaxis_title': 'Date',
+                'yaxis_title': 'Item price (£)',
+                'height': 420,
+                'width': 560,
             }
             
             context['graph'] = plot({'data': graph, 'layout': layout}, 

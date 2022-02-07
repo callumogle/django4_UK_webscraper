@@ -1,17 +1,18 @@
 {% extends 'webscraper/base.html' %}
 {% load static %}
 {% block content%}
-<h1>{{item.item_name}}</h1>
-<div class="image-container">
-    <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="100px" width="100px">
-</div>
+    <h1>{{item.item_name}}</h1>
+    <div class="image-container">
+        <img src="{% static  item.item_image  %}.jpg" alt="{{item.item_name}}" height="300px" width="300px">
+        
+    </div>
 
     {% if graph %}
-        {% autoescape off %}
-            {{graph}}
-        {% endautoescape %}
+        <div id="test" style="display: grid; justify-content: center;">
+            {{graph|safe}}
+        </div>
     {% endif %}
-    {% if item_history %}
+    {% if item_history %}   
         <h2>item history</h2>
         {% for i in item_history %}
             

@@ -47,7 +47,7 @@ def get_quantity(string):
     # really annoying, for one product the name is McVitie's Digestives Milk Chocolate x2 Biscuits 316g
     quantity = quantity.replace('biscuits ','').strip()
     single_items = ['single','loose','each']
-    print("genrgfbweopjwnp")
+    
     if quantity in single_items:
         quantity = 1
     return quantity
@@ -92,7 +92,8 @@ def grab_image(store, element, image_css):
     img_name = img_name.replace("*","").replace('"','')
     file_path = f"{os.getcwd()}\webscraper\static\{store}\{img_name}.jpg"
     if os.path.isfile(file_path):
-        print(f"file: {img_name}.jpg already exists")
+        #print(f"file: {img_name}.jpg already exists")
+        pass
     else:
         with open(file_path, "wb") as f:
             try:
@@ -620,7 +621,7 @@ def tesco_scrape(search_term):
             driver.execute_script(f"window.scrollBy(0, {rand_y});")
             new_height = driver.execute_script("return window.pageYOffset;")
 
-            print(f"tesco + {new_height}")
+            #print(f"tesco + {new_height}")
             if new_height == last_height:
                 # is_the_image_loaded_yet = driver.execute_script("return document.images[49].srcset;")
                 # WebDriverWait(driver,timeout=2).until(lambda d: d.execute_script("return document.images[49].srcset;") != "")
@@ -714,23 +715,6 @@ def tesco_scrape(search_term):
 def scraper(search_term):
     # get this through a form
     search_term = search_term.replace("%20", " ")
-
-    # !r means get the official representation of the string i.e. it gives the quotation marks as well 'scraperesults' in this case
-    # similar to calling repr(string), using this because this statement is looking for the table name as a string.
-    # try:
-    #     cursor.execute(cursor.execute(f"SELECT * FROM {table_name} WHERE search_term = {search_term!r} AND date_searched={todays_date!r}"))
-    #     if cursor.fetchone() != None:
-    #         print('item has been searched for today')
-    #         already_searched = cursor.fetchall()
-    #         for item in already_searched:
-    #             print(item)
-    #         do_search = False
-    # # this error means i've either messed up the sql being executed or the table doesnt exist
-    # except mysql.connector.ProgrammingError as sql_err:
-    #     print("Table does not exist, creating Table")
-    #     cursor.execute(f"CREATE TABLE {table_name} (store VARCHAR(11), item_name VARCHAR(255), price DECIMAL(6,2), unit_price VARCHAR(20), search_term VARCHAR(255), url VARCHAR(255))")
-
-    # cursor.close()
 
     # tasks = [ asda_scrape, aldi_scrape, morrisons_scrape, sainsbury_scrape, tesco_scrape]
     # so i can easily disable/enable different functions
