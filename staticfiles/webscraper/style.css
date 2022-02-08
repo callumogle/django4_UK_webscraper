@@ -1,0 +1,149 @@
+* {
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
+}
+
+body {
+    
+    display:grid;
+    grid-template-columns: 10vw auto 10vw;
+}
+
+#results-container{
+    display:grid;
+    /* gap puts padding around the children*/
+    gap: 1rem;
+    /* grid template columns how many boxes in a row, repeat(n,nfr) 
+    is how many columns and how big those columns should be,
+    1 fr being a fraction of avaialable space 
+    grid-template-columns: repeat(6,1fr);
+    
+    grid-template-rows:repeat(auto-fit,minmax(150px,1fr));
+    */
+    grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+}
+
+.item-container{
+    border: solid 1px black;
+    display:grid;
+    justify-content: center;
+}
+
+.item-info{
+    display: flex;
+    text-align: center;
+    flex-direction:column;
+    justify-content:space-around;
+    
+}
+.item-info > div:not(:last-child){
+    margin: 10px 0;
+}
+.price, .quantity{
+    
+    width:50%;
+}
+.image-container{
+    display:grid;
+    justify-content: center;
+}
+
+#register-form {
+    margin-left:20px;
+}
+
+
+
+header,footer{
+    grid-column: 1/4;
+}
+
+header{
+    margin-bottom:10px;
+}
+
+#search-form{
+    display: flex;
+    justify-content: center;
+}
+
+#mag-glass{
+    margin-left:2px;    
+}
+
+#filters > #store-filter-cont {
+    float:left;
+    margin-right:10px;
+}
+
+#price-sort-cont{
+    
+}
+
+.invisible{
+    visibility: hidden;
+    display:none !important;
+}
+#spinner-loading{
+    display: flex;
+    justify-content: center;
+    
+}
+#spinner-loading::after{
+    content: "";
+    width:50px;
+    height:50px;
+    
+    border:10px solid #dddddd;
+    border-top-color:red;
+    border-radius:50%;
+    animation: loading 1.5s linear infinite;
+}
+@keyframes loading {
+    to {
+        transform:rotate(1turn);
+    }
+}
+
+/* login section */
+.content-section{
+    display:flex;
+    flex-flow:column wrap;
+    align-items: center;
+    justify-content: center;
+    padding:30px 0px;
+    
+}
+.content-section fieldset{
+    padding:0 10px;
+    
+}
+.content-section input{
+    margin-bottom: 20px;;
+    width:100%;
+}
+.content-section li {
+    padding: 5px 0;
+    margin-left: 20px;;
+}
+span.helptext{
+    display: block;
+}
+p label{
+    display: block;
+    font-weight: bold;
+    margin: 5px 0;
+}
+.content-section button[type="submit"]{
+    background-color: rgb(107, 33, 33);
+    color:rgb(241, 241, 241);
+    height:40px;
+    font-size:18px;
+    border-radius: 20px;
+    width: 50%;
+    margin-left: 25%;
+}
+.content-section button[type="submit"]:hover{
+    cursor:pointer;
+}
